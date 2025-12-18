@@ -189,7 +189,7 @@ export default function AlmostChoicePage() {
           </div>
 
           <div className="mt-12">
-            <WhatNext />
+            <WhatNext currentHref="/almost-choice" />
           </div>
         </section>
       </div>
