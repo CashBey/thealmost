@@ -29,10 +29,11 @@ export default function AlmostChoicePage() {
     const tilt = (Math.random() * 0.4 - 0.2).toFixed(3); // -0.2..0.2 deg
     const shadowA = 22 + Math.floor(Math.random() * 4); // 22–25
     const shadowB = 20 + Math.floor(Math.random() * 4); // 20–23
-    const blurEdge = Math.random() < 0.55 ? "left" : "right";
+    const blurEdge: "left" | "right" = Math.random() < 0.55 ? "left" : "right";
     const hoverDelayRight = 10 + Math.floor(Math.random() * 18); // 10–27ms
-    return { gap, tilt, shadowA, shadowB, blurEdge, hoverDelayRight };
+    return { gap, tilt, shadowA, shadowB, blurEdge, hoverDelayRight } as const;
   }, []);
+
 
   useEffect(() => {
     return () => {
