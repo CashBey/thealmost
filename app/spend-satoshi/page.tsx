@@ -97,31 +97,34 @@ export default function SpendSatoshiPage() {
   }
 
   function attemptBuy(item: Item) {
-    if (phase !== 'spending') return;
+  if (phase !== 'spending') return;
 
-    if (item.costBTC === '∞') {
-      showToast('Unavailable.');
-      return;
-    }
-
-    if (item.costBTC === 0) {
-      showToast('No transaction.');
-      return;
-    }
-
-    if (remainingBTC <= 0) {
-      showToast('Nothing left.');
-      return;
-    }
-
-    if (item.costBTC > remainingBTC) {
-      showToast('Not enough.');
-      return;
-    }
-
-    setRemainingBTC((r) => clamp(r - item.costBTC, 0, SATOSHI_BTC_ESTIMATE));
-    setSpentBTC((s) => clamp(s + item.costBTC, 0, SATOSHI_BTC_ESTIMATE));
+  if (item.costBTC === '∞') {
+    showToast('Unavailable.');
+    return;
   }
+
+  if (item.costBTC === 0) {
+    showToast('No transaction.');
+    return;
+  }
+
+  if (remainingBTC <= 0) {
+    showToast('Nothing left.');
+    return;
+  }
+
+  const cost = item.costBTC; // burada artık kesin number
+
+  if (cost > remainingBTC) {
+    showToast('Not enough.');
+    return;
+  }
+
+  setRemainingBTC((r) => clamp(r - cost, 0, SATOSHI_BTC_ESTIMATE));
+  setSpentBTC((s) => clamp(s + cost, 0, SATOSHI_BTC_ESTIMATE));
+}
+
 
   return (
     <div className="min-h-screen bg-white text-black dark:bg-[#0f0f10] dark:text-white">
