@@ -10,10 +10,18 @@ type Coin = {
 };
 
 export default function DonateCrypto({ compact = false }: { compact?: boolean }) {
-  const coins = useMemo<Coin[]>(() => {
-    const btc = process.env.NEXT_PUBLIC_DONATE_BTC || "";
-    const eth = process.env.NEXT_PUBLIC_DONATE_ETH || "";
-    const usdt = process.env.NEXT_PUBLIC_DONATE_USDT_TRC20 || "";
+  const coins = useMemo(() => {
+  const btc = process.env.NEXT_PUBLIC_DONATE_BTC || "";
+  const eth = process.env.NEXT_PUBLIC_DONATE_ETH || "";
+  const usdt = process.env.NEXT_PUBLIC_DONATE_USDT_TRC20 || "";
+
+  return [
+    { key: "BTC", label: "BTC", address: btc },
+    { key: "ETH", label: "ETH", address: eth },
+    { key: "USDT", label: "USDT (TRC20)", address: usdt },
+  ] satisfies Coin[];
+}, []);
+
 
     return [
       { key: "BTC", label: "BTC", address: btc },
@@ -119,3 +127,4 @@ export default function DonateCrypto({ compact = false }: { compact?: boolean })
     </div>
   );
 }
+
