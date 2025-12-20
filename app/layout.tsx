@@ -1,11 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import ThemeToggle from "./components/ThemeToggle";
 import RandomOddOverlay from "./components/RandomOddOverlay";
 import OddInteractionsProvider from "./components/OddInteractionsProvider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "odd fun",
@@ -34,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="font-sans">
         <OddInteractionsProvider>
           <ThemeToggle />
           <RandomOddOverlay />
