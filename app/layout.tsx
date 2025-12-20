@@ -5,22 +5,23 @@ import RandomOddOverlay from "./components/RandomOddOverlay";
 import OddInteractionsProvider from "./components/OddInteractionsProvider";
 
 export const metadata: Metadata = {
-  title: "odd fun",
+  metadataBase: new URL("https://thealmost.fun"),
+  title: {
+    default: "thealmost",
+    template: "%s · thealmost",
+  },
   description: "a place for odd little experiments",
   openGraph: {
-    images: [
-      {
-        url: "https://bolt.new/static/og_default.png",
-      },
-    ],
+    title: "thealmost",
+    description: "a place for odd little experiments",
+    url: "https://thealmost.fun",
+    siteName: "thealmost",
+    images: [{ url: "/opengraph-image" }],
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    images: [
-      {
-        url: "https://bolt.new/static/og_default.png",
-      },
-    ],
+    images: ["/opengraph-image"],
   },
 };
 
