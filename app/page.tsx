@@ -73,6 +73,10 @@ function useFakeGlobalCounter(key = "odd-fun-nothing-count") {
 
 export default function HomePage() {
   const experiments = useMemo(() => EXPERIMENT_CARDS, []);
+  const featured = useMemo(
+    () => experiments.find((e) => !e.disabled && !!e.href) ?? experiments[0],
+    [experiments]
+  );
 
   // micro touch #1: delayed reveal (logo first, then grid)
   const [showGrid, setShowGrid] = useState(false);
@@ -143,66 +147,45 @@ export default function HomePage() {
           <div className="text-xs text-neutral-400 dark:text-neutral-500">{/* spacer */}</div>
         </header>
 
-        
-        {/* Micro-manifesto + featured */}
-        <div className="mt-10 max-w-2xl">
+        {/* Micro manifesto */}
+        <section className="mt-8 max-w-2xl">
           <div className="text-sm text-neutral-700 dark:text-neutral-300">
             small interactive ideas to think with.
           </div>
-          <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+          <div className="mt-2 text-xs text-neutral-500 dark:text-neutral-400">
             no accounts. no feeds. just experiments.
           </div>
-        </div>
+        </section>
 
-        {(() => {
-          const featured = experiments.find((e) => !!e.href && !e.disabled);
-          if (!featured || !featured.href) return null;
-
-          return (
-            <div className="mt-8">
-              <div className="text-[11px] uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">
-                Featured
-              </div>
-
-              <Link href={featured.href} className="mt-3 block odd-interactive">
-                <div
-                  className={[
-                    "group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm",
-                    "dark:border-white/10 dark:bg-white/5",
-                    "transition hover:shadow-md",
-                  ].join(" ")}
-                >
-                  <div className="grid gap-0 sm:grid-cols-[180px_1fr]">
-                    <div className="relative aspect-[4/3] sm:aspect-square">
-                      <Image
-                        src={featured.imageSrc}
-                        alt={featured.title}
-                        fill
-                        sizes="180px"
-                        className="object-cover"
-                        priority
-                      />
-                    </div>
-                    <div className="p-5">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="text-base font-semibold tracking-tight">{featured.title}</div>
-                        {featured.badge && (
-                          <span className="rounded-full border border-black/10 bg-black/5 px-2 py-1 text-[10px] font-medium tracking-wider text-neutral-700 dark:border-white/10 dark:bg-white/10 dark:text-neutral-200">
-                            {featured.badge}
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{featured.subtitle}</p>
-                      <div className="mt-4 text-xs text-neutral-400 dark:text-neutral-500">Open →</div>
-                    </div>
-                  </div>
-                </div>
-              </Link>
+        {/* Featured */}
+        {featured?.href && (
+          <section className="mt-8">
+            <div className="text-[11px] uppercase tracking-[0.22em] text-neutral-400 dark:text-neutral-500">
+              Featured
             </div>
-          );
-        })()}
+            <Link
+              href={featured.href}
+              className={[
+                "odd-interactive mt-3 block overflow-hidden rounded-2xl border border-black/10 bg-white p-5 shadow-sm transition",
+                "hover:shadow-md dark:border-white/10 dark:bg-white/5",
+              ].join(" ")}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-base font-semibold tracking-tight">{featured.title}</div>
+                  <div className="mt-1 text-sm text-neutral-600 dark:text-neutral-300">{featured.subtitle}</div>
+                </div>
+                {featured.badge && (
+                  <span className="rounded-full border border-black/10 px-2 py-1 text-[11px] text-neutral-600 dark:border-white/10 dark:text-neutral-300">
+                    {featured.badge}
+                  </span>
+                )}
+              </div>
+            </Link>
+          </section>
+        )}
 
-{/* Experiments grid */}
+        {/* Experiments grid */}
         <section
           className={[
             "mt-10 grid gap-6 sm:grid-cols-2",
@@ -392,9 +375,14 @@ export default function HomePage() {
 
         {/* Why + Donate row (INSIDE component) */}
         <div className="mt-10 flex items-center justify-between gap-4">
-          <Link href="/why" className="odd-interactive text-sm opacity-60 hover:opacity-100 transition">
-            why this exists
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/about" className="odd-interactive text-sm opacity-60 hover:opacity-100 transition">
+              about
+            </Link>
+            <Link href="/why" className="odd-interactive text-sm opacity-60 hover:opacity-100 transition">
+              why
+            </Link>
+          </div>
           <div className="w-[260px] sm:w-[320px]">
             <DonateCrypto compact />
           </div>
