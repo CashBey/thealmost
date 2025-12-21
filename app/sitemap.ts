@@ -6,6 +6,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: `${base}/`, lastModified: new Date() },
+    { url: `${base}/experiments`, lastModified: new Date() },
+    { url: `${base}/about`, lastModified: new Date() },
+    { url: `${base}/why`, lastModified: new Date() },
+    { url: `${base}/donate`, lastModified: new Date() },
     ...ACTIVE_EXPERIMENTS.map((e) => ({
       url: `${base}${e.href}`,
       lastModified: new Date(),

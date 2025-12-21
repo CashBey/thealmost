@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Download, RefreshCw, Share2 } from 'lucide-react';
 import WhatNext from '../components/WhatNext';
+import CopyLink from "../components/CopyLink";
 type OptionId = 'A' | 'B';
 type Step =
   | {
@@ -678,3 +679,5 @@ export default function HowManipulableAreYouPage() {
     </div>
   );
 }
+
+<CopyLink />

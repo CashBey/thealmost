@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Share2, RefreshCw, Download } from 'lucide-react';
 import WhatNext from '../components/WhatNext';
+import CopyLink from "../components/CopyLink";
 
 type Choice = 'A' | 'B';
 
@@ -889,3 +890,5 @@ const questionableQuestions = [8, 4, 12, 15, 6];
 
   return null;
 }
+
+<CopyLink />

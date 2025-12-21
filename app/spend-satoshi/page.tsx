@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import WhatNext from '../components/WhatNext';
+import CopyLink from "../components/CopyLink";
 
 type Phase = 'intro' | 'spending' | 'end';
 
@@ -57,6 +58,7 @@ export default function SpendSatoshiPage() {
 
   const [remainingBTC, setRemainingBTC] = useState<number>(SATOSHI_BTC_ESTIMATE);
   const [spentBTC, setSpentBTC] = useState<number>(0);
+  const [purchases, setPurchases] = useState<Item[]>([]);
 
   const [microLine, setMicroLine] = useState<string>(MICRO_LINES[0]);
   const [toast, setToast] = useState<string | null>(null);
@@ -76,7 +78,26 @@ export default function SpendSatoshiPage() {
       });
     }, 1700 + Math.floor(Math.random() * 900));
 
-    return () => {
+    
+
+function randomSpend() {
+  // pick a random affordable, non-weird item
+  const affordable = ITEMS.filter((it) => it.costBTC !== '∞' && typeof it.costBTC === 'number' && it.costBTC > 0 && it.costBTC <= remainingBTC);
+  if (affordable.length === 0) {
+    showToast('Not enough.');
+    return;
+  }
+  const pick = affordable[Math.floor(Math.random() * affordable.length)];
+  attemptBuy(pick);
+}
+
+const mostRegrettable = useMemo(() => {
+  const numeric = purchases.filter((p) => p.costBTC !== '∞' && typeof p.costBTC === 'number' && p.costBTC > 0);
+  if (numeric.length === 0) return null;
+  return numeric.reduce((a, b) => ((a.costBTC as number) > (b.costBTC as number) ? a : b));
+}, [purchases]);
+
+return () => {
       if (introTimerRef.current) window.clearTimeout(introTimerRef.current);
       if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
       window.clearInterval(lineInterval);
@@ -123,6 +144,7 @@ export default function SpendSatoshiPage() {
 
   setRemainingBTC((r) => clamp(r - cost, 0, SATOSHI_BTC_ESTIMATE));
   setSpentBTC((s) => clamp(s + cost, 0, SATOSHI_BTC_ESTIMATE));
+  setPurchases((p) => [...p, item]);
 }
 
 
@@ -182,6 +204,16 @@ export default function SpendSatoshiPage() {
               </div>
             </div>
 
+            <div className="mt-4 flex justify-end">
+              <button
+                type="button"
+                onClick={randomSpend}
+                className="odd-interactive text-xs opacity-60 hover:opacity-100 transition underline"
+              >
+                random spend
+              </button>
+            </div>
+
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {ITEMS.map((item) => {
                 const disabled =
@@ -238,6 +270,12 @@ export default function SpendSatoshiPage() {
           <div className="mt-16">
             <div className="text-2xl sm:text-3xl font-semibold tracking-tight">You didn&apos;t feel richer.</div>
 
+            {mostRegrettable && (
+              <div className="mt-4 text-sm opacity-70">
+                Most regrettable purchase: <span className="font-medium">{mostRegrettable.name}</span>
+              </div>
+            )}
+
             <div className="mt-4 text-sm opacity-70">Because it was never yours.</div>
 
             <WhatNext currentHref="/spend-satoshi" />
@@ -251,3 +289,5 @@ export default function SpendSatoshiPage() {
     </div>
   );
 }
+
+<CopyLink />

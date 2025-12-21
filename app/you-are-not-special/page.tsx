@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Download, RefreshCw, Share2 } from 'lucide-react';
 import WhatNext from '../components/WhatNext';
+import CopyLink from "../components/CopyLink";
 
 type Choice = { id: string; label: string; weight?: number };
 type Question = {
@@ -547,6 +548,7 @@ export default function YouAreNotSpecialPage() {
           </section>
         )}
       </div>
+          <CopyLink />
     </main>
   );
 }

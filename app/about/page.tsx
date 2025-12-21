@@ -34,6 +34,14 @@ export default function AboutPage() {
           >
             why this exists
           </Link>
+
+<Link
+  href="/donate"
+  className="rounded-xl border border-black/10 px-3 py-2 text-xs hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10"
+>
+  donate
+</Link>
+
         </div>
       </div>
     </main>

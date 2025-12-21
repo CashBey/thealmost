@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Download, RefreshCw, Share2 } from 'lucide-react';
 import WhatNext from '../components/WhatNext';
+import CopyLink from "../components/CopyLink";
 
 function formatNumber(n: number) {
   try {
@@ -220,6 +221,7 @@ export default function WaitingGamePage() {
           </div>
         )}
       </div>
+          <CopyLink />
     </main>
   );
 }

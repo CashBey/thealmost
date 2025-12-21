@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import WhatNext from "../components/WhatNext";
+import CopyLink from "../components/CopyLink";
 
 type Choice = "left" | "right";
 type Phase = "idle" | "resolving" | "resolved";
@@ -193,6 +194,7 @@ export default function AlmostChoicePage() {
           </div>
         </section>
       </div>
+          <CopyLink />
     </main>
   );
 }

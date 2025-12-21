@@ -382,6 +382,9 @@ export default function HomePage() {
             <Link href="/why" className="odd-interactive text-sm opacity-60 hover:opacity-100 transition">
               why
             </Link>
+            <Link href="/donate" className="odd-interactive text-sm opacity-60 hover:opacity-100 transition">
+              donate
+            </Link>
           </div>
           <div className="w-[260px] sm:w-[320px]">
             <DonateCrypto compact />
