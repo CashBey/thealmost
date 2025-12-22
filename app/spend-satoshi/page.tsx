@@ -1,145 +1,113 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CopyLink from "../components/CopyLink";
 
-const SATOSHI_BTC_ESTIMATE = 0.00000001;
-
-type Item = {
-  id: string;
-  name: string;
-  costBTC: number | "∞";
-  note?: string;
-};
-
-const ITEMS: Item[] = [
-  { id: "coffee", name: "Coffee", costBTC: 0.0000004 },
-  { id: "sandwich", name: "Sandwich", costBTC: 0.0000009 },
-  { id: "book", name: "Book", costBTC: 0.000002 },
-  { id: "headphones", name: "Headphones", costBTC: 0.000006 },
-  { id: "laptop", name: "Laptop", costBTC: 0.00002 },
-  { id: "house", name: "House", costBTC: "∞", note: "Not enough." },
-];
-
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
+type Result =
+  | "You hesitate more than you decide."
+  | "You commit quickly, even when it doesn’t matter."
+  | "You try to optimize nothing."
+  | "You moved a lot, but chose little."
+  | "You waited for permission that never came.";
 
 export default function SpendSatoshi() {
-  const [remainingBTC, setRemainingBTC] = useState(SATOSHI_BTC_ESTIMATE);
-  const [spentBTC, setSpentBTC] = useState(0);
-  const [history, setHistory] = useState<Item[]>([]);
+  const startTime = useRef<number>(Date.now());
+  const moves = useRef<number>(0);
+  const firstDirection = useRef<"left" | "right" | null>(null);
+  const maxDistance = useRef<number>(0);
 
-  const items = useMemo(() => ITEMS, []);
+  const [value, setValue] = useState(50);
+  const [confirmed, setConfirmed] = useState(false);
+  const [result, setResult] = useState<Result | null>(null);
 
-  function showToast(text: string) {
-    alert(text);
+  function onMove(v: number) {
+    if (firstDirection.current === null) {
+      firstDirection.current = v > value ? "right" : "left";
+    }
+
+    moves.current += 1;
+    maxDistance.current = Math.max(maxDistance.current, Math.abs(v - 50));
+    setValue(v);
   }
 
-  function attemptBuy(item: Item) {
-    if (item.costBTC === "∞") {
-      showToast("Unavailable.");
-      return;
+  function confirm() {
+    const timeSpent = Date.now() - startTime.current;
+
+    let r: Result;
+
+    if (timeSpent > 8000 && moves.current < 5) {
+      r = "You waited for permission that never came.";
+    } else if (moves.current > 25 && maxDistance.current < 20) {
+      r = "You try to optimize nothing.";
+    } else if (firstDirection.current === "right" && timeSpent < 3000) {
+      r = "You commit quickly, even when it doesn’t matter.";
+    } else if (moves.current > 15 && maxDistance.current > 40) {
+      r = "You moved a lot, but chose little.";
+    } else {
+      r = "You hesitate more than you decide.";
     }
 
-    if (item.costBTC === 0) {
-      showToast("No transaction.");
-      return;
-    }
+    setConfirmed(true);
 
-    if (remainingBTC <= 0) {
-      showToast("Nothing left.");
-      return;
-    }
-
-    const cost = item.costBTC;
-
-    if (cost > remainingBTC) {
-      showToast("Not enough.");
-      return;
-    }
-
-    setRemainingBTC((r) =>
-      clamp(r - cost, 0, SATOSHI_BTC_ESTIMATE)
-    );
-    setSpentBTC((s) =>
-      clamp(s + cost, 0, SATOSHI_BTC_ESTIMATE)
-    );
-    setHistory((h) => [...h, item]);
+    setTimeout(() => {
+      setResult(r);
+    }, 900);
   }
-
-  function randomSpend() {
-    const affordable = items.filter(
-      (item) =>
-        item.costBTC !== "∞" &&
-        item.costBTC > 0 &&
-        item.costBTC <= remainingBTC
-    );
-
-    if (affordable.length === 0) return;
-
-    const randomItem =
-      affordable[Math.floor(Math.random() * affordable.length)];
-
-    attemptBuy(randomItem);
-  }
-
-  const mostRegrettable = history.at(-1);
 
   return (
-    <div className="min-h-screen px-6 py-16 flex justify-center">
-      <div className="max-w-xl w-full space-y-8">
-        <h1 className="text-2xl font-semibold">Spend Satoshi</h1>
+    <div className="min-h-screen flex items-center justify-center px-6">
+      <div className="w-full max-w-md space-y-10">
+        {!confirmed && (
+          <>
+            <div className="space-y-3">
+              <h1 className="text-2xl font-medium">Spend Satoshi</h1>
+              <p className="text-sm opacity-70">
+                You have one satoshi.
+                <br />
+                You may spend it.
+              </p>
+            </div>
 
-        <p className="text-sm opacity-70">
-          You have one satoshi. Spend it.
-        </p>
+            <div className="space-y-6">
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={value}
+                onChange={(e) => onMove(Number(e.target.value))}
+                className="w-full"
+              />
 
-        <div className="text-sm">
-          <div>Remaining: {remainingBTC.toFixed(8)} BTC</div>
-          <div>Spent: {spentBTC.toFixed(8)} BTC</div>
-        </div>
-
-        <div className="space-y-2">
-          {items.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => attemptBuy(item)}
-              className="w-full text-left border rounded-xl px-4 py-3 text-sm hover:bg-black/5 transition disabled:opacity-40"
-              disabled={item.costBTC !== "∞" && item.costBTC > remainingBTC}
-            >
-              <div className="flex justify-between">
-                <span>{item.name}</span>
-                <span>
-                  {item.costBTC === "∞"
-                    ? "∞"
-                    : `${item.costBTC} BTC`}
-                </span>
+              <div className="flex justify-between text-xs opacity-40">
+                <span>Keep it</span>
+                <span>Spend it</span>
               </div>
-              {item.note && (
-                <div className="text-xs opacity-50 mt-1">
-                  {item.note}
-                </div>
-              )}
+            </div>
+
+            <button
+              onClick={confirm}
+              className="text-xs opacity-60 hover:opacity-100 transition underline"
+            >
+              confirm
             </button>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={randomSpend}
-          className="text-xs opacity-60 hover:opacity-100 transition underline"
-        >
-          random spend
-        </button>
-
-        {mostRegrettable && (
-          <div className="text-xs opacity-60">
-            Most regrettable purchase: {mostRegrettable.name}
-          </div>
+          </>
         )}
 
-        <CopyLink />
+        {confirmed && !result && (
+          <div className="text-sm opacity-60">Measuring…</div>
+        )}
+
+        {result && (
+          <div className="space-y-6">
+            <div className="text-lg">{result}</div>
+
+            <div className="text-xs opacity-50">
+              The satoshi remains.
+            </div>
+
+            <CopyLink />
+          </div>
+        )}
       </div>
     </div>
   );
