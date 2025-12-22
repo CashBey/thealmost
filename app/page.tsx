@@ -5,6 +5,25 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EXPERIMENT_CARDS } from "../lib/experiments";
 import DonateCrypto from "./components/DonateCrypto";
+import Link from "next/link";
+
+export default function HomePage() {
+  return (
+    <main className="min-h-screen">
+
+      {/* Donate link */}
+      <Link
+        href="/donate"
+        className="fixed top-6 right-6 text-sm text-neutral-400 hover:text-neutral-900 transition"
+      >
+        Donate
+      </Link>
+
+      {/* mevcut içerik */}
+    </main>
+  );
+}
+
 
 function formatNumber(n: number) {
   try {
