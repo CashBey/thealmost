@@ -26,6 +26,7 @@ export default function AlmostButton() {
   const [frozen, setFrozen] = useState(false);
 
   const milestones = useMemo(() => Object.keys(MILESTONES).map(Number), []);
+  const [showMilestones, setShowMilestones] = useState(false);
 
   useEffect(() => {
     if (MILESTONES[count]) {
@@ -40,7 +41,11 @@ export default function AlmostButton() {
 
   const handleClick = () => {
     if (frozen) return;
-    setCount((c) => c + 1);
+    setCount((c) => {
+      const next = c + 1;
+      if (next >= 50) setShowMilestones(true);
+      return next;
+    });
 
     if (Math.random() < 0.005) {
       setFrozen(true);
@@ -79,6 +84,7 @@ export default function AlmostButton() {
         </p>
       </div>
 
+      {showMilestones && (
       <section className="w-full max-w-xl">
         <h2 className="mb-3 text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
           milestones
@@ -100,6 +106,7 @@ export default function AlmostButton() {
           ))}
         </ul>
       </section>
+    )}
     </main>
   );
 }
