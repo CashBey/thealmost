@@ -51,9 +51,9 @@ export const EXPERIMENT_CARDS: ExperimentCard[] = [
     badge: 'NEW',
   },
   {
-    title: "Spend Satoshi's Bitcoin",
-    subtitle: 'A number you can empty without owning it.',
-    href: '/spend-satoshi',
+    title: 'The Richest Person Alive',
+    subtitle: 'For a moment, you have more money than anyone who has ever lived.',
+    href: '/the-richest-person-alive',
     imageSrc: '/thumbnails/spend-satoshi.png',
     badge: 'NEW',
   },
