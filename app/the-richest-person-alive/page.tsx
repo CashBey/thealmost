@@ -10,7 +10,7 @@ type Item = {
   whisper: string;
 };
 
-const INITIAL_WEALTH = 320_000_000_000; // intentionally abstract
+const INITIAL_WEALTH = 320_000_000_000;
 
 function formatUSD(n: number) {
   return new Intl.NumberFormat("en-US", {
@@ -44,7 +44,6 @@ export default function TheRichestPersonAlive() {
       { id: "platform", title: "Own a global platform", cost: 44_000_000_000, whisper: "A conversation, controlled." },
       { id: "debt", title: "Erase a generation’s debt", cost: 1_700_000_000_000, whisper: "Forgiveness is expensive." },
       { id: "market", title: "Control a market for a day", cost: 10_000_000_000, whisper: "Stability, temporarily." },
-
       { id: "time", title: "One year of someone’s time", cost: 60_000, whisper: "Priceless. Sold daily." },
       { id: "home", title: "A home", cost: 400_000, whisper: "Safety, quantified." },
       { id: "meal", title: "A warm meal", cost: 15, whisper: "Forgotten by tomorrow." },
@@ -60,7 +59,6 @@ export default function TheRichestPersonAlive() {
       return;
     }
     if (item.cost > remaining) return;
-
     setRemaining((r) => r - item.cost);
     setHistory((h) => [...h, item]);
     setWhisper(whispers[Math.min(history.length, whispers.length - 1)]);
@@ -80,9 +78,7 @@ export default function TheRichestPersonAlive() {
         <header className="space-y-3">
           <h1 className="text-2xl font-medium">The Richest Person Alive</h1>
           <p className="text-sm opacity-70">
-            For a moment,
-            <br />
-            you have more money than anyone who has ever lived.
+            For a moment,<br />you have more money than anyone who has ever lived.
           </p>
         </header>
 
@@ -98,19 +94,15 @@ export default function TheRichestPersonAlive() {
                 key={item.id}
                 onClick={() => buy(item)}
                 disabled={item.cost > remaining && item.cost !== 0}
-                className="w-full text-left rounded-xl border border-black/10 dark:border-white/10 px-4 py-3 hover:bg-black/5 transition disabled:opacity-40"
+                className="w-full text-left rounded-xl border border-black/10 px-4 py-3 hover:bg-black/5 transition disabled:opacity-40"
               >
                 <div className="flex justify-between gap-4">
                   <span className="text-sm">{item.title}</span>
                   {item.cost > 0 && (
-                    <span className="text-xs opacity-60">
-                      {formatUSD(item.cost)}
-                    </span>
+                    <span className="text-xs opacity-60">{formatUSD(item.cost)}</span>
                   )}
                 </div>
-                <div className="mt-1 text-xs opacity-50 italic">
-                  {item.whisper}
-                </div>
+                <div className="mt-1 text-xs opacity-50 italic">{item.whisper}</div>
               </button>
             ))}
           </section>
@@ -120,12 +112,7 @@ export default function TheRichestPersonAlive() {
           <section className="space-y-4">
             <div className="text-lg">You are still here.</div>
             <div className="text-sm opacity-60">The money is gone.</div>
-            <button
-              onClick={reset}
-              className="text-xs opacity-60 hover:opacity-100 underline"
-            >
-              reset
-            </button>
+            <button onClick={reset} className="text-xs opacity-60 hover:opacity-100 underline">reset</button>
           </section>
         )}
 
