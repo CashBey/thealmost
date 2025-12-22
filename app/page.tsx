@@ -98,9 +98,19 @@ export default function HomePage() {
       noScrollTimer = window.setTimeout(() => openSecret(), 8000);
     };
 
-    const onClick = () => {
+    const onClick = (e: MouseEvent) => {
+      // Only count clicks on "empty space" (not on buttons/links/inputs/cards).
+      const t = e.target as HTMLElement | null;
+      if (!t) return;
+      const interactive = t.closest(
+        'a,button,input,textarea,select,summary,[role="button"],[data-odd-interactive],.odd-interactive'
+      );
+      if (interactive) return;
+      // Also ignore clicks inside experiment cards / bordered panels
+      const insidePanel = t.closest('section,article,header,footer,[data-odd-thumb],[data-odd-shift]');
+      if (insidePanel) return;
       clicks += 1;
-      if (clicks >= 7) openSecret();
+      if (clicks >= 16) openSecret();
     };
 
     const onVisibility = () => {
