@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const rareMessages = [
-  "almost.",
-  "not yet.",
-  "close.",
-  "try again.",
-];
+const rareMessages = ["almost.", "not yet.", "close.", "try again."];
 
 export default function AlmostButton() {
   const [count, setCount] = useState(0);
@@ -15,7 +10,6 @@ export default function AlmostButton() {
   const [frozen, setFrozen] = useState(false);
 
   useEffect(() => {
-    // Very rare auto-reset after many presses
     if (count > 0 && count % 137 === 0) {
       setLabel("you ruined it.");
       setTimeout(() => {
@@ -28,12 +22,10 @@ export default function AlmostButton() {
   const handleClick = () => {
     if (frozen) return;
 
-    setCount((c) => c + 1);
-
+    setCount(c => c + 1);
     const r = Math.random();
 
     if (r < 0.005) {
-      // 0.5% — freeze button briefly
       setFrozen(true);
       setLabel("...");
       setTimeout(() => {
@@ -44,7 +36,6 @@ export default function AlmostButton() {
     }
 
     if (r < 0.02) {
-      // 2% — rare message
       setLabel(rareMessages[Math.floor(Math.random() * rareMessages.length)]);
       return;
     }
@@ -66,10 +57,7 @@ export default function AlmostButton() {
         </button>
 
         <p className="text-xs text-neutral-500">pressed {count} times</p>
-
-        <p className="text-[11px] text-neutral-400">
-          it is closer than it looks.
-        </p>
+        <p className="text-[11px] text-neutral-400">it is closer than it looks.</p>
       </div>
     </main>
   );
