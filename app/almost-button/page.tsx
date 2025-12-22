@@ -35,9 +35,7 @@ export default function AlmostButton() {
 
     if (count > 0 && count % 137 === 0) {
       setLabel("you ruined it.");
-      setTimeout(() => {
-        setLabel("press me");
-      }, 1200);
+      setTimeout(() => setLabel("press me"), 1200);
     }
   }, [count]);
 
@@ -45,7 +43,6 @@ export default function AlmostButton() {
     if (frozen) return;
 
     setCount((c) => c + 1);
-
     const r = Math.random();
 
     if (r < 0.005) {
@@ -69,20 +66,24 @@ export default function AlmostButton() {
         <button
           onClick={handleClick}
           className={[
-            "rounded-2xl border border-black/10 bg-white px-10 py-5 text-lg text-neutral-900 shadow-sm transition dark:border-white/10 dark:bg-white/10 dark:text-neutral-100",
+            "rounded-2xl border border-black/10 bg-white px-10 py-5 text-lg text-neutral-900 shadow-sm transition",
+            "dark:border-white/10 dark:bg-white/10 dark:text-neutral-100",
             frozen ? "opacity-50 cursor-not-allowed" : "hover:shadow-md",
           ].join(" ")}
         >
           {label}
         </button>
 
-        <p className="text-xs text-neutral-500">pressed {count} times</p>
-        <p className="text-[11px] text-neutral-400">it is closer than it looks.</p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+          pressed {count} times
+        </p>
+        <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
+          it is closer than it looks.
+        </p>
       </div>
 
-      {/* Milestones */}
       <section className="w-full max-w-xl">
-        <h2 className="mb-3 text-xs uppercase tracking-widest text-neutral-400">
+        <h2 className="mb-3 text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
           milestones
         </h2>
         <ul className="space-y-1 text-sm">
