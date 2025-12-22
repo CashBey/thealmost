@@ -119,17 +119,12 @@ export default function HomePage() {
     };
 
     window.addEventListener("click", onClick);
-    window.addEventListener("scroll", resetNoScroll, { passive: true });
-    document.addEventListener("visibilitychange", onVisibility);
-
+        
     // start no-scroll timer on first load
-    resetNoScroll();
-
+    
     return () => {
       window.removeEventListener("click", onClick);
-      window.removeEventListener("scroll", resetNoScroll as any);
-      document.removeEventListener("visibilitychange", onVisibility);
-      if (noScrollTimer) window.clearTimeout(noScrollTimer);
+                  if (noScrollTimer) window.clearTimeout(noScrollTimer);
     };
   }, [router]);
 
@@ -174,9 +169,7 @@ const experiments = useMemo(() => EXPERIMENT_CARDS, []);
       // 63/64 “almost” wobble
       setFakeProgress(y % 2 === 0 ? 63 : 64);
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+        return () =>   }, []);
 
   useEffect(() => {
     if (hasScrolled) return;
