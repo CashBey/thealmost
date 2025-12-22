@@ -10,7 +10,6 @@ export default function DonatePage() {
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="w-full max-w-md space-y-8 text-center">
 
-        {/* Back to home */}
         <div className="text-left">
           <Link
             href="/"
