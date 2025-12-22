@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useMemo, useState } from "react";
 
 const MILESTONES: Record<number, string> = {
@@ -23,6 +24,7 @@ export default function AlmostButton() {
   const [count, setCount] = useState(0);
   const [label, setLabel] = useState("press me");
   const [frozen, setFrozen] = useState(false);
+
   const milestones = useMemo(() => Object.keys(MILESTONES).map(Number), []);
 
   useEffect(() => {
@@ -68,8 +70,12 @@ export default function AlmostButton() {
         >
           {label}
         </button>
+
         <p className="text-xs text-neutral-500 dark:text-neutral-400">
           pressed {count} times
+        </p>
+        <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
+          it is closer than it looks.
         </p>
       </div>
 
