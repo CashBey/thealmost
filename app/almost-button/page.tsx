@@ -22,7 +22,7 @@ export default function AlmostButton() {
   const handleClick = () => {
     if (frozen) return;
 
-    setCount(c => c + 1);
+    setCount((c) => c + 1);
     const r = Math.random();
 
     if (r < 0.005) {
