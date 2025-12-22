@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { EXPERIMENT_CARDS } from "../lib/experiments";
 import DonateCrypto from "./components/DonateCrypto";
@@ -73,7 +74,56 @@ function useFakeGlobalCounter(key = "odd-fun-nothing-count") {
 }
 
 export default function HomePage() {
-  const experiments = useMemo(() => EXPERIMENT_CARDS, []);
+  const router = useRouter();
+
+  // EASTER EGG: 7 clicks OR tab change OR "no scroll" opens /secret
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let clicks = 0;
+    let noScrollTimer: number | null = null;
+
+    const openSecret = () => {
+      // small guard to avoid loops
+      if (window.location.pathname === "/secret") return;
+      try {
+        window.sessionStorage.setItem("found_secret", "1");
+        window.sessionStorage.setItem("found_secret_at", String(Date.now()));
+      } catch {}
+      router.push("/secret");
+    };
+
+    const resetNoScroll = () => {
+      if (noScrollTimer) window.clearTimeout(noScrollTimer);
+      noScrollTimer = window.setTimeout(() => openSecret(), 8000);
+    };
+
+    const onClick = () => {
+      clicks += 1;
+      if (clicks >= 7) openSecret();
+    };
+
+    const onVisibility = () => {
+      // If they switch tabs and come back, reveal it.
+      if (document.visibilityState === "visible") openSecret();
+    };
+
+    window.addEventListener("click", onClick);
+    window.addEventListener("scroll", resetNoScroll, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
+
+    // start no-scroll timer on first load
+    resetNoScroll();
+
+    return () => {
+      window.removeEventListener("click", onClick);
+      window.removeEventListener("scroll", resetNoScroll as any);
+      document.removeEventListener("visibilitychange", onVisibility);
+      if (noScrollTimer) window.clearTimeout(noScrollTimer);
+    };
+  }, [router]);
+
+const experiments = useMemo(() => EXPERIMENT_CARDS, []);
   const featured = useMemo(
     () => experiments.find((e) => !e.disabled && !!e.href) ?? experiments[0],
     [experiments]

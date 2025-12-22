@@ -19,9 +19,12 @@ export default function DonatePage() {
           </Link>
         </div>
 
-        <h1 className="text-2xl font-semibold">Support the project</h1>
+        <h1 className="text-2xl font-semibold">You don’t need to.</h1>
         <p className="text-sm text-neutral-500">
-          If you find this interesting, you can support it.
+          But you can.
+        </p>
+        <p className="text-xs text-neutral-400">
+          This will not unlock anything.
         </p>
 
         <div className="space-y-4 text-left">
