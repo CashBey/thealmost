@@ -14,7 +14,7 @@ export type ExperimentLink = {
   title: string;
 };
 
-export const EXPERIMENT_CARDS: ExperimentCard[
+export const EXPERIMENT_CARDS: ExperimentCard[] = [
   {
     title: "The Almost Button",
     subtitle: "It will never do what you expect.",
@@ -22,7 +22,7 @@ export const EXPERIMENT_CARDS: ExperimentCard[
     imageSrc: "/thumbnails/almost-button.png",
     badge: "NEW",
   },
-] = [
+
   {
     title: 'The Choice Engine',
     subtitle: 'Every choice changes who you are.',
