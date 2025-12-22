@@ -25,14 +25,15 @@ export default function AlmostButton() {
   const [label, setLabel] = useState("press me");
   const [frozen, setFrozen] = useState(false);
 
+  // keep milestones totally secret: no list, no UI, no reveal trigger
   const milestones = useMemo(() => Object.keys(MILESTONES).map(Number), []);
-  const [showMilestones, setShowMilestones] = useState(false);
 
   useEffect(() => {
     if (MILESTONES[count]) {
       setLabel(MILESTONES[count]);
       return;
     }
+
     if (count > 0 && count % 137 === 0) {
       setLabel("you ruined it.");
       setTimeout(() => setLabel("press me"), 1200);
@@ -41,11 +42,8 @@ export default function AlmostButton() {
 
   const handleClick = () => {
     if (frozen) return;
-    setCount((c) => {
-      const next = c + 1;
-      if (next >= 50) setShowMilestones(true);
-      return next;
-    });
+
+    setCount((c) => c + 1);
 
     if (Math.random() < 0.005) {
       setFrozen(true);
@@ -57,7 +55,8 @@ export default function AlmostButton() {
       return;
     }
 
-    if (!MILESTONES[count + 1]) {
+    // keep the small "nothing happened" vibe, but don't expose milestone list
+    if (!milestones.includes(count + 1)) {
       setLabel("nothing happened");
     }
   };
@@ -83,30 +82,6 @@ export default function AlmostButton() {
           it is closer than it looks.
         </p>
       </div>
-
-      {showMilestones && (
-      <section className="w-full max-w-xl">
-        <h2 className="mb-3 text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-          milestones
-        </h2>
-        <ul className="space-y-1 text-sm">
-          {milestones.map((m) => (
-            <li
-              key={m}
-              className={[
-                "flex items-center justify-between rounded-md px-3 py-1",
-                count >= m
-                  ? "bg-black/5 text-neutral-800 dark:bg-white/10 dark:text-neutral-100"
-                  : "text-neutral-400 dark:text-neutral-500",
-              ].join(" ")}
-            >
-              <span>{m.toLocaleString()}</span>
-              <span className="italic">{MILESTONES[m]}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
     </main>
   );
 }
