@@ -1,6 +1,9 @@
-import SecretClient, { secretMetadata } from "./SecretClient";
+import SecretClient from "./SecretClient";
 
-export const metadata = secretMetadata;
+export const metadata = {
+  title: "Secret — thealmost",
+  description: "You found it.",
+};
 
 export default function SecretPage() {
   return <SecretClient />;

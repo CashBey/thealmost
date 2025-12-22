@@ -4,11 +4,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export const secretMetadata = {
-  title: "Secret — thealmost",
-  description: "You found it.",
-};
-
 export default function SecretClient() {
   const router = useRouter();
   const lines = useMemo(
