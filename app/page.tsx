@@ -163,15 +163,24 @@ const experiments = useMemo(() => EXPERIMENT_CARDS, []);
   const [mindText, setMindText] = useState("this will stay the same");
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const onScroll = () => {
       setHasScrolled(true);
       const y = window.scrollY || 0;
       // 63/64 “almost” wobble
       setFakeProgress(y % 2 === 0 ? 63 : 64);
     };
-        return () =>   }, []);
 
-  useEffect(() => {
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+useEffect(() => {
     if (hasScrolled) return;
     const t = window.setTimeout(() => {
       // Only flips if they didn't scroll (secret little rule)
