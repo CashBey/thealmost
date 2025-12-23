@@ -24,13 +24,20 @@ export default function AlmostButton() {
   const [count, setCount] = useState(0);
   const [label, setLabel] = useState("press me");
   const [frozen, setFrozen] = useState(false);
+  const [log, setLog] = useState<string[]>([]);
 
-  // keep milestones totally secret: no list, no UI, no reveal trigger
-  const milestones = useMemo(() => Object.keys(MILESTONES).map(Number), []);
+  const milestoneNumbers = useMemo(
+    () => Object.keys(MILESTONES).map(Number),
+    []
+  );
 
   useEffect(() => {
     if (MILESTONES[count]) {
-      setLabel(MILESTONES[count]);
+      const text = MILESTONES[count];
+      setLabel(text);
+      setLog((prev) =>
+        prev.includes(text) ? prev : [...prev, text]
+      );
       return;
     }
 
@@ -55,8 +62,7 @@ export default function AlmostButton() {
       return;
     }
 
-    // keep the small "nothing happened" vibe, but don't expose milestone list
-    if (!milestones.includes(count + 1)) {
+    if (!milestoneNumbers.includes(count + 1)) {
       setLabel("nothing happened");
     }
   };
@@ -78,10 +84,17 @@ export default function AlmostButton() {
         <p className="text-xs text-neutral-500 dark:text-neutral-400">
           pressed {count} times
         </p>
-        <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
-          it is closer than it looks.
-        </p>
       </div>
+
+      {log.length > 0 && (
+        <section className="w-full max-w-md space-y-2 text-sm text-neutral-600 dark:text-neutral-300">
+          {log.map((line, i) => (
+            <div key={i} className="opacity-70">
+              {line}
+            </div>
+          ))}
+        </section>
+      )}
     </main>
   );
 }
